@@ -1,0 +1,26 @@
+Docker Daemon: usado para criar, executar e gerenciar os contêineres;
+Docker Client: interface de linha de comando;
+Docker API: possibilita a comunicação entre as ferramentas externas e o Docker.
+
+Docker Hub 
+Funciona como um repositório de imagens de contêineres. 
+Ele permite que o usuário busque imagens prontas para usar e também possibilita que os desenvolvedores 
+enviem as suas imagens para outras pessoas.  
+
+Docker Compose 
+É uma ferramenta utilizada para operar vários contêineres com um único serviço. 
+Ela permite definir múltiplos contêineres e configurar a comunicação entre eles de forma simples e organizada.  
+
+
+
+Para testes usamos o docker run
+
+docker run --name qualquer_nome -d (Roda em segundo plano) -p porta_na_máquina:porta_no_container redis (Estou baixando a imagem do redis)
+
+# Para rodar pacotes __init__.py, tratamos o caminho como objeto, usado em conjunto python3 -m pasta.arquivo
+
+# Em resumo
+
+docker-compose -> Executa vários containers, primeiro baixando a imagem
+
+dockerfile -> Manual de instruções que diz ao docker como criar uma imagem

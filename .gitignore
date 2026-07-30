@@ -1,0 +1,19 @@
+# Node
+src/node_modules/
+src/dist/
+
+# Python
+src/venv/
+venv/
+**/__pycache__/
+**/*.pyc
+
+# Ambientes/segredos
+.env
+*.env.local
+
+# Editor
+.vscode/
+
+# Sistema
+.DS_Store

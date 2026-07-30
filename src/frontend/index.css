@@ -1,0 +1,123 @@
+body{
+    font-family: 'Inter', sans-serif;
+    background-color: rgb(205, 233, 246);
+}
+
+#layout{
+    display: grid;
+
+    grid-template-rows: 1f 3f;
+
+    /* border: solid 2px; */
+
+    height: 100vh;
+
+    gap: 5vh;
+
+    margin: 20px;
+
+    padding: 20px;
+
+
+    /* background-color: aquamarine; */
+
+}
+
+#container-header{
+    /* background-color:rgb(168, 227, 255); */
+    background-color: white;
+    /* border-radius: 20px; */
+
+    /* 87, 172, 212 */
+
+}
+
+#header{
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    height: 100%;
+    width: 100%;
+
+}
+
+#container-card{
+
+    display:flex;
+    /* background-color: lightpink; */
+    /* border: solid 2px; */
+    gap:20px;
+    padding: 10px;
+
+    align-items: center;
+}
+
+.card{
+    width: 33%;
+    height:90%;
+    margin: 10px;
+    padding: 10px;
+
+    border-radius: 10px;
+    border: 1px solid rgb(168, 227, 255);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    background-color: white;
+
+
+    /*Animações*/
+
+    transition: box-shadow 0.3s ease, transform 0.2s ease; /* Suaviza a transição */
+
+}
+
+#container-botoes{
+    padding: 10px;
+    display: flex;
+    gap: 30px;
+}
+
+button{
+    background-color: antiquewhite;
+    border-radius: 10px;
+    border: solid 1px;
+    border-color: lightblue;
+    font-size: 24px;
+    font-weight: bold;  
+    
+    width: 50%;
+    height: 100%;
+
+    transition: box-shadow 0.3s ease, transform 0.2s ease; /* Suaviza a transição */
+
+}
+
+#botao-ligar{
+    background-color: lightgreen;
+}
+
+#botao-desligar{
+    background-color: lightcoral;
+}
+
+.card-status{
+    border:none;
+}
+
+.card:hover{
+    box-shadow: 0 0 15px 4px lightgray; /* Efeito de iluminação */
+    transform: translateY(-2px); /* Leve elevação do botão */
+}
+
+button:hover{
+    box-shadow: 0 0 15px 4px lightgray; /* Efeito de iluminação */
+    transform: translateY(-2px); /* Leve elevação do botão */
+}

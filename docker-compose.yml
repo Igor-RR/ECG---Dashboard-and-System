@@ -1,0 +1,62 @@
+services:
+  # Banco de dados Redis
+  redis-teste:
+      image: redis:alpine
+
+  # Server
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    ports:
+      - "8000:8000" 
+    command: python3 -m api.server
+    depends_on:
+      - redis-teste
+    
+  # Collector
+  collector:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    ports:
+      - "5000:5000" 
+    command: python3 -m collector.collector
+    depends_on:
+      - redis-teste
+  
+  # Consumer
+  consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    ports:
+      - "5500:5500"
+    command: python3 -m consumer.consumer
+    depends_on:
+      - redis-teste
+  
+  # Main
+  main:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    ports:
+      - "5700:5700"
+    command: python3 main.py
+    depends_on:
+      - "consumer"
+
+  # Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    ports:
+      - "3000:80"
+    depends_on:
+      - redis-teste
+
+
+
+

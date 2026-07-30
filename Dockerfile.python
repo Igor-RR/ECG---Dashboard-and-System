@@ -1,0 +1,14 @@
+# Instala o interpretador python
+FROM python:3.11-slim
+
+# Cria um diretório interno para a imagem
+WORKDIR /app
+
+# instala as dependencias
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copia a pasta src
+COPY src/ .
+
+# Deixamos o CMD para o docker-compose cuidar, dado que a imagem funcionará como uma espécie de VENV global

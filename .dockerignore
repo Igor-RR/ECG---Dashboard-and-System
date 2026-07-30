@@ -1,0 +1,20 @@
+# Node
+src/node_modules
+src/dist
+
+# Python
+src/venv
+**/__pycache__
+**/*.pyc
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile.node
+Dockerfile.python
+.dockerignore
+
+# Editor
+.vscode
