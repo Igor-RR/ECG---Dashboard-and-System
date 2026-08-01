@@ -26,12 +26,14 @@ function Section(){
 
         // Lê os eventos e atualiza o valor de dados
         ws.onmessage = (event) => {
+        
+        console.log("Mensagem recebida:", event.data)
         setDados(JSON.parse(event.data))
     }
 
     return() => { ws.close()} // Desfaz quando saímos a conexão pe encerrada
 
-    })
+    },[])
 
 
     return(

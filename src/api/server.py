@@ -2,6 +2,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
+import asyncio
 
 # Craindo o servidor
 app = FastAPI()
@@ -45,6 +46,7 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             await conexao.receive_text() # Mantém a escuta, evitando a desconexão
+            asyncio.sleep(3)
     except WebSocketDisconnect:
         conexao = None
         print("Conexão encerrada")

@@ -5,7 +5,6 @@ import plotly.express as px
 import joblib as jlb
 import glob
 import pandas as pd
-import time
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 import requests as req
@@ -31,7 +30,7 @@ scaler = StandardScaler()
 
 # arquivo = glob.glob("../data/raw/*estendido*.csv")
 
-arquivo = glob.glob("*estendido*.csv")
+arquivo = glob.glob("**.csv")
 
 print(arquivo)
 
@@ -39,68 +38,83 @@ print(arquivo)
 
 while True:
 
-    df = pd.read_csv(arquivo[0])
+    for i in arquivo:
+        df = pd.read_csv(i)
 
+        # O frontedn do sparkfun na configuração de monitor cardiáco, permite a passagem de 0,5 - 40hz de frequência
+        # Os sinais de EMG possuem banda util de 10 - 450 hz
+        # PA -> fc = 10hz
+        # NOTCH -> 60 hz
+        # PB -> 40hz
 
-    # O frontedn do sparkfun na configuração de monitor cardiáco, permite a passagem de 0,5 - 40hz de frequência
-    # Os sinais de EMG possuem banda util de 10 - 450 hz
-    # PA -> fc = 10hz
-    # NOTCH -> 60 hz
-    # PB -> 40hz
+        # Dados para o gráfico de linha
+        sinal_bruto = df['Tensão'].tolist()
+        tempo = df['Tempo'].tolist()
 
-    # Dados para o gráfico de linha
-    sinal_bruto = df['Tensão'].tolist()
-    tempo = df['Tempo'].tolist()
+        df['Tensão'] = funcoes.filtro_PA(df,20,4,fs)
+        df["Tensão"] = funcoes.filtro_PB(df,40,2,fs)
+        df['Tensão'] = funcoes.filtro_NOTCH(df,60,2,fs)
 
-    df['Tensão'] = funcoes.filtro_PA(df,20,4,fs)
-    df["Tensão"] = funcoes.filtro_PB(df,40,2,fs)
-    df['Tensão'] = funcoes.filtro_NOTCH(df,60,2,fs)
+        # Dados para o gráfico de barras (Frequências contidas no sinal)
+        frequencias,intensidade = funcoes.fourier(df)
 
-    # Dados para o gráfico de barras (Frequências contidas no sinal)
-    frequencias,intensidade = funcoes.fourier(df)
+        frequencias = np.round(frequencias,1)
+        intensidade = np.round(intensidade,2)
 
-    # Converte para lista para possibilitar a conversão para JSON
-    frequencias = frequencias.tolist()
-    intensidade = intensidade.tolist()
+        # Converte para lista para possibilitar a conversão para JSON
+        frequencias = frequencias.tolist()
+        intensidade = intensidade.tolist()
 
-    data = funcoes.twd(df,"db4",4)
+        data = funcoes.twd(df,"db4",4)
 
-    data = funcoes.extrair_features(data)
+        data = funcoes.extrair_features(data)
 
-    data = data.drop("Estado",axis=1)
+        data = data.drop("Estado",axis=1)
 
-    data = scaler.fit_transform(data)
+        data = scaler.fit_transform(data)
 
-    print(data[1])
+        classificacoes = svm.predict(data)
 
-    classificacoes = svm.predict(data)
+        # Votação
 
-    # Votação
+        n_relaxado = np.count_nonzero(classificacoes == 0)
+        n_contraido = np.count_nonzero(classificacoes == 1)
 
-    n_relaxado = np.count_nonzero(classificacoes == 0)
-    n_contraido = np.count_nonzero(classificacoes == 1)
+        if n_relaxado > n_contraido:
+            print("Braço relaxado")
+            classificacao = "Relaxado"
 
-    if n_relaxado > n_contraido:
-        print("Braço relaxado")
-        classificacao = "Relaxado"
+        elif n_contraido > n_relaxado:
+            print("Braço contraído")
+            classificacao = "Contraído"
+        else:
+            pass
 
-    elif n_contraido > n_relaxado:
-        print("Braço contraído")
-        classificacao = "Contraído"
-    else:
-        pass
+        lista_frequencias = []
 
-    # Json de resposta que será enviado à API
-    dados = {
-        "classificacao":classificacao,
-        "amplitudes":intensidade,
-        "frequencias":frequencias,
-        "tensao":sinal_bruto,
-        "tempo":tempo
-    }
+        lista_intensidade = []
 
-    # Envio de dados para API
-    resposta = req.post(url,json=dados)
+        for i in range(len(frequencias)):
+
+            if frequencias[i] < 20:
+                pass
+            elif (frequencias[i] < 40) and (frequencias[i] > 20):
+                lista_frequencias.append(frequencias[i])
+                lista_intensidade.append(intensidade[i])
+            elif(frequencias[i] > 40):
+                break
+
+        # Json de resposta que será enviado à API
+        dados = {
+            "classificacao":classificacao,
+            "amplitudes":lista_intensidade,
+            "frequencias":lista_frequencias,
+            "tensao":sinal_bruto,
+            "tempo":tempo
+        }
+
+        # Envio de dados para API
+        resposta = req.post(url,json=dados)
 
 
 

@@ -1,123 +1,141 @@
-body{
+/* Reseta margens e garante que padding/border entrem no cálculo de tamanho */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
     font-family: 'Inter', sans-serif;
     background-color: rgb(205, 233, 246);
+    min-height: 100vh;
 }
 
-#layout{
+#layout {
     display: grid;
+    /* Linhas ajustadas para dar proporção ideal aos elementos */
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "header"
+        "card"
+        "botao";
 
-    grid-template-rows: 1f 3f;
-
-    /* border: solid 2px; */
-
-    height: 100vh;
-
-    gap: 5vh;
-
-    margin: 20px;
-
+    min-height: 100vh;
     padding: 20px;
-
-
-    /* background-color: aquamarine; */
-
+    gap: 15px;
 }
 
-#container-header{
-    /* background-color:rgb(168, 227, 255); */
+/* --- HEADER --- */
+#container-header {
+    grid-area: header;
     background-color: white;
-    /* border-radius: 20px; */
-
-    /* 87, 172, 212 */
-
-}
-
-#header{
-
+    border-radius: 10px;
+    padding: 15px;
+    
+    /* Centraliza o conteúdo dentro da área do header */
     display: flex;
-
     justify-content: center;
     align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
 
-    height: 100%;
+#header h1 {
+    font-size: 1.8rem;
+    color: #1a1a1a;
+    text-align: center;
+}
+
+/* --- CONTAINER DOS CARDS / GRÁFICOS --- */
+#container-card {
+    grid-area: card;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    
+    min-height: 0; /* Previne overflow de flex-items */
+    overflow: hidden;
+}
+
+.card {
     width: 100%;
-
-}
-
-#container-card{
-
-    display:flex;
-    /* background-color: lightpink; */
-    /* border: solid 2px; */
-    gap:20px;
-    padding: 10px;
-
-    align-items: center;
-}
-
-.card{
-    width: 33%;
-    height:90%;
-    margin: 10px;
-    padding: 10px;
+    padding: 15px;
+    flex: 1;
+    min-height: 0;
 
     border-radius: 10px;
     border: 1px solid rgb(168, 227, 255);
+    background-color: white;
 
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
     position: relative;
 
+    padding: 45px 15px 15px 15px;
+
+    /* Animação suave */
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+/* --- CARD ESPECÍFICO DE STATUS ("Contraído") --- */
+.card-status {
+    border: none;
+    padding: 0px;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a1a;
     background-color: white;
-
-
-    /*Animações*/
-
-    transition: box-shadow 0.3s ease, transform 0.2s ease; /* Suaviza a transição */
-
 }
 
-#container-botoes{
-    padding: 10px;
+/* --- BOTOES --- */
+#container-botoes {
+    grid-area: botao;
     display: flex;
-    gap: 30px;
-}
-
-button{
-    background-color: antiquewhite;
-    border-radius: 10px;
-    border: solid 1px;
-    border-color: lightblue;
-    font-size: 24px;
-    font-weight: bold;  
+    justify-content: center; /* Centraliza os botões na tela */
+    align-items: center;
+    gap: 20px;
     
-    width: 50%;
+    width: 100%;
+    max-width: 600px; /* Impede que os botões fiquem gigantes em monitores Widescreen */
+    margin: 0 auto;  /* Centraliza o bloco na horizontal */
+    height: 55px;    /* Altura fixa e confortável para cliques */
+}
+
+button {
+    flex: 1;
     height: 100%;
-
-    transition: box-shadow 0.3s ease, transform 0.2s ease; /* Suaviza a transição */
-
+    border-radius: 8px;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    
+    transition: box-shadow 0.3s ease, transform 0.2s ease, filter 0.2s ease;
 }
 
-#botao-ligar{
-    background-color: lightgreen;
+#botao-ligar {
+    background-color: #8ce99a;
+    color: black;
 }
 
-#botao-desligar{
-    background-color: lightcoral;
+#botao-desligar {
+    background-color: #ff8787;
+    color: black;
 }
 
-.card-status{
-    border:none;
+button:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    filter: brightness(1.03); /* Leve brilho ao passar o mouse */
 }
 
-.card:hover{
-    box-shadow: 0 0 15px 4px lightgray; /* Efeito de iluminação */
-    transform: translateY(-2px); /* Leve elevação do botão */
-}
-
-button:hover{
-    box-shadow: 0 0 15px 4px lightgray; /* Efeito de iluminação */
-    transform: translateY(-2px); /* Leve elevação do botão */
+button:active {
+    transform: translateY(0); /* Feedback de clique */
 }

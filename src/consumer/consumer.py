@@ -8,7 +8,7 @@ def consumer():
 
     try:
         while True:
-            # Busca as chaTves
+            # Busca as chaves
             estado = list(client.scan_iter(match='estado_[0-9]'))
             tensao = list(client.scan_iter(match='tensao_[0-9]'))
             tempo = list(client.scan_iter(match='tempo_[0-9]'))

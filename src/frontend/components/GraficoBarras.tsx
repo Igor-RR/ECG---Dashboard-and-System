@@ -6,50 +6,39 @@ import {
     Title,
     Tooltip,
     Legend,
-    scales,
 } from "chart.js"
 
-import {Bar} from 'react-chartjs-2'
+import { Bar } from 'react-chartjs-2'
 
 type dadosGraficoLinha = {
   amplitudes: number[]
   frequencias: number[]
 }
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-// Passa para o chartJS o modo como o gráfico deve ser montado
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,scales);
-
-
-
-// Configurações adicionais do gráfico
 const opcoes = {
   responsive: true,
+  animation: false as const,
+  maintainAspectRatio: false, // Gráfico deve respeitar o tamanho do container
   plugins: {
     legend: {
-      position: "top" as const,
+      position: 'top' as const
     },
     title: {
       display: true,
-      text: "Frequências por mês",
+      text: "Frequências",
     },
   },
-
-  scales:{
-    x:{
-      grid:{
+  scales: {
+    x: {
+      grid: {
         display: false
       }
     }
   }
 };
 
-
-function GraficoBarras({amplitudes,frequencias}:dadosGraficoLinha){
-
-
-
-
-  // Dados para a construção do protótipo do gráfico
+function GraficoBarras({ amplitudes, frequencias }: dadosGraficoLinha) {
   const dados = {
     labels: frequencias,
     datasets: [
@@ -61,9 +50,9 @@ function GraficoBarras({amplitudes,frequencias}:dadosGraficoLinha){
     ],
   };
 
-  return(
-    <Bar data={dados} options={opcoes}/>
-    )
+  return (
+    <Bar data={dados} options={opcoes} />
+  )
 }
 
 export default GraficoBarras

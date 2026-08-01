@@ -40,7 +40,6 @@ with porta:
         print("Digite apenas 0 ou 1!")
 
     # Coleta dos dados
-
     registro = 0
 
     while True: 
@@ -49,7 +48,7 @@ with porta:
 
             registro,estado,tensao,tempo = struct.unpack(TIPOS_NA_STRUCT,leitura)
 
-            # faz a conversão para os valores reais
+            # Faz a conversão para os valores reais
             tensao = tensao*3.3/4095
 
             # Salva  cada item na lista
